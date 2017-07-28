@@ -69,7 +69,7 @@ class DerivTestSingleton extends DerivTestClass {
 
 
 
-class TestFactory extends \KaelShipman\Factory {
+class TestFactory extends \KS\Factory {
   public function getClass(string $type, string $subtype=null) {
     if ($type == 'test') {
       if ($subtype == 'singleton') return 'TestSingleton';

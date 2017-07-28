@@ -38,7 +38,7 @@ class FactoryTests extends TestCase {
     try {
       $f->new('invalid');
       $this->fail('Should have thrown an exception');
-    } catch(\KaelShipman\UnknownClassException $e) {
+    } catch(\KS\UnknownClassException $e) {
       $this->assertTrue(true, 'This is the expected behavior');
     }
   }

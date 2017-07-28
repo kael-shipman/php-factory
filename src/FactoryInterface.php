@@ -1,5 +1,5 @@
 <?php
-namespace KaelShipman;
+namespace KS;
 
 /**
  * A class that provides construction and creation of arbitrary classes

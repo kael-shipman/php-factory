@@ -1,5 +1,5 @@
 <?php
-namespace KaelShipman;
+namespace KS;
 
 abstract class Factory implements FactoryInterface {
     protected static $instance = array();
