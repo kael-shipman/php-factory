@@ -3,7 +3,6 @@ namespace KS;
 
 abstract class Factory implements FactoryInterface {
     protected static $instance = array();
-    public static $autoinject = false;
 
     protected function __construct() {
     }
@@ -36,16 +35,21 @@ abstract class Factory implements FactoryInterface {
     protected function instantiate(string $class, string $type=null, string $action, array $args) {
         $c = $this->getClass($class, $type);
 
-        // Autoinject self, if requested
-        if ($this->autoinject && !($args[0] instanceof FactoryInterface)) array_unshift($args, $this);
-
         // Now either instantiate new or static create
+        $instance = null;
         if ($action == 'new') {
             $c = new \ReflectionClass($c);
-            return $c->newInstanceArgs($args);
+            $instance = $c->newInstanceArgs($args);
+        } elseif ($action == 'create') {
+            $instance = call_user_func_array(array($c, 'create'), $args);
+        } else {
+            throw new \RuntimeException("Don't know how to handle action `$action`. I only know how to handle `new` and `create`.");
         }
-        if ($action == 'create') return call_user_func_array(array($c, 'create'), $args);
-        throw new \RuntimeException("Don't know how to handle action `$action`. I only know how to handle `new` and `create`.");
+
+        // Inject factory, if possible
+        if ($instance instanceof \KS\FactoryConsumerInterface) $instance->setFactory($this);
+
+        return $instance;
     }
 
     public function getClass(string $class, string $subtype=null) {

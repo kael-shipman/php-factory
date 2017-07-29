@@ -64,13 +64,16 @@ class DerivTestSingleton extends DerivTestClass {
   }
 }
 
-class InjectableTestClass {
+class InjectableTestClass implements \KS\FactoryConsumerInterface {
     public $factory;
     public $num;
 
-    public function __construct(\KS\FactoryInterface $f=null, int $num=null) {
-        $this->factory = $f;
+    public function __construct(int $num=null) {
         $this->num = $num;
+    }
+
+    public function setFactory(\KS\Factory $f) {
+        $this->factory = $f;
     }
 }
 
