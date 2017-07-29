@@ -64,6 +64,16 @@ class DerivTestSingleton extends DerivTestClass {
   }
 }
 
+class InjectableTestClass {
+    public $factory;
+    public $num;
+
+    public function __construct(\KS\FactoryInterface $f=null, int $num=null) {
+        $this->factory = $f;
+        $this->num = $num;
+    }
+}
+
 
 
 
@@ -73,6 +83,7 @@ class TestFactory extends \KS\Factory {
   public function getClass(string $type, string $subtype=null) {
     if ($type == 'test') {
       if ($subtype == 'singleton') return 'TestSingleton';
+      if ($subtype == 'injectable') return 'InjectableTestClass';
       return 'TestClass';
     }
     return parent::getClass($type, $subtype);

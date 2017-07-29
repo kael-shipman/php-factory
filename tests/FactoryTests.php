@@ -7,6 +7,39 @@ class FactoryTests extends TestCase {
     $f = TestFactory::getInstance();
     $this->assertEquals('TestClass', $f->getClass('test'));
   }
+  
+  public function testFactoryCanOptionallyAutoInjectSelfIntoChildren() {
+    $f = TestFactory::getInstance();
+    $i = $f->new('test', 'injectable');
+
+    $this->assertNull($i->factory, 'Auto-insert of factory should default to "off"');
+
+    $i = $f->new('test', 'injectable', $f);
+    $this->assertTrue($i->factory === $f, "Should be able to pass factory explicitly");
+    $this->assertNull($i->num, "The second parameter should still be unset");
+
+    $i = $f->new('test', 'injectable', $f, 100);
+    $this->assertTrue($i->factory === $f, "Should be able to pass factory explicitly with other params");
+    $this->assertEquals(100, $i->num, "The second parameter should be set correctly");
+
+    // Now switch on autoinject
+    $f->autoinject = true;
+
+    $i = $f->new('test', 'injectable');
+    $this->assertTrue($i->factory === $f, "Factory should be set even when not passed");
+    $this->assertNull($i->num, "The second parameter should not be set");
+
+    $i = $f->new('test', 'injectable', 200);
+    $this->assertTrue($i->factory === $f, "Factory should be set implicitly");
+    $this->assertEquals(200, $i->num, "The second parameter should be set correctly along with factory");
+
+    $i = $f->new('test', 'injectable', $f, 200);
+    $this->assertTrue($i->factory === $f, "Factory should be set when passed explicitly, even though autoinject is on");
+    $this->assertEquals(200, $i->num, "The second parameter should be set correctly even though double inject of factory");
+
+    // Return to default
+    $f->autoinject = false;
+  }
 
   public function testThrowsExceptionOnInvalidStaticCreate() {
     $f = TestFactory::getInstance();
