@@ -87,7 +87,7 @@ To create a factory that can instantiate all these objects, here's what we do:
 <?php
 namespace MyNamespace;
 
-class MyFactory extends \KaelShipman\Factory {
+class MyFactory extends \KS\Factory {
     // Signature has to match the original Factory::getClass method
     public function getClass(string $type, string $subtype=null) {
         // Return the class as a string including namespace
