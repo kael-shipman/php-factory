@@ -6,6 +6,6 @@ namespace KS;
  */
 
 interface FactoryConsumerInterface {
-    public function setFactory(Factory $f);
+    public function setFactory(FactoryInterface $f);
 }
 
