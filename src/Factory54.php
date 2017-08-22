@@ -13,19 +13,19 @@ abstract class Factory54 implements Factory54Interface {
         return static::$instance[$classname];
     }
 
-    public function neew(string $class, string $type=null) {
+    public function neew($class, $type=null) {
         $args = array();
         for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
         return $this->instantiate($class, $type, 'new', $args);
     }
 
-    public function create(string $class, string $type=null) {
+    public function create($class, $type=null) {
         $args = array();
         for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
         return $this->instantiate($class, $type, 'create', $args);
     }
 
-    public function get(string $class, string $type=null) {
+    public function get($class, $type=null) {
         $c = $this->getClass($class, $type);
         $args = array();
         for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
@@ -33,7 +33,7 @@ abstract class Factory54 implements Factory54Interface {
         return call_user_func_array(array($c, 'getInstance'), $args);
     }
 
-    protected function instantiate(string $class, string $type=null, string $action, array $args) {
+    protected function instantiate($class, $type=null, $action, $args) {
         $c = $this->getClass($class, $type);
 
         // Now either instantiate new or static create
@@ -53,7 +53,7 @@ abstract class Factory54 implements Factory54Interface {
         return $instance;
     }
 
-    public function getClass(string $class, string $subtype=null) {
+    public function getClass($class, $subtype=null) {
         throw new UnknownClassException("Don't know how to create classes for type `$class::$subtype`");
     }
 }

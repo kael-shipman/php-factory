@@ -20,7 +20,7 @@ interface Factory54Interface {
    * @param string|null $subtype - an optional descriptor to further specify which class you want
    * @return mixed - a new instance of the class you want to instantiate
    */
-  function neew(string $class, string $subtype=null);
+  function neew($class, $subtype=null);
 
   /**
    * Create a new instance of a class using the class's static `create` method.
@@ -31,7 +31,7 @@ interface Factory54Interface {
    * @param string|null $subtype - an optional descriptor to further specify which class you want
    * @return mixed - a new instance of the class you want to instantiate
    */
-  function create(string $class, string $subtype=null);
+  function create($class, $subtype=null);
 
   /**
    * Get a string that can be used to instantiate the class indicated by `$class` and `$subtype`
@@ -40,6 +40,6 @@ interface Factory54Interface {
    * @param string|null $subtype - an optional descriptor to further specify which class you want
    * @return string - a string representation of an instantiatable class
    */
-  function getClass(string $class, string $subtype=null);
+  function getClass($class, $subtype=null);
 }
 

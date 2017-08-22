@@ -81,7 +81,7 @@ class Injectable54TestClass implements \KS\Factory54ConsumerInterface {
     public $factory;
     public $num;
 
-    public function __construct(int $num=null) {
+    public function __construct($num=null) {
         $this->num = $num;
     }
 
@@ -121,7 +121,7 @@ class DerivTestFactory extends TestFactory {
 
 
 class TestFactory54 extends \KS\Factory54 {
-  public function getClass(string $type, string $subtype=null) {
+  public function getClass($type, $subtype=null) {
     if ($type == 'test') {
       if ($subtype == 'singleton') return 'TestSingleton';
       if ($subtype == 'injectable') return 'Injectable54TestClass';
@@ -132,7 +132,7 @@ class TestFactory54 extends \KS\Factory54 {
 }
 
 class DerivTestFactory54 extends TestFactory54 {
-  public function getClass(string $type, string $subtype=null) {
+  public function getClass($type, $subtype=null) {
     if ($type == 'test') {
       if ($subtype == 'origSingleton') return parent::getClass($type, 'singleton');
       if ($subtype == 'singleton') return 'DerivTestSingleton';
