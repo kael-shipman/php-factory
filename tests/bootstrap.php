@@ -6,7 +6,7 @@ class TestClass {
   protected $one;
   protected $two;
 
-  public function __construct(int $one, int $two) {
+  public function __construct($one, $two) {
     $this->one = $one;
     $this->two = $two;
   }
@@ -32,13 +32,13 @@ class DerivTestClass extends TestClass {
 
 class TestSingleton extends TestClass {
   protected static $instance;
-  public function __construct(int $one, int $two) {
+  public function __construct($one, $two) {
     if (static::$instance !== null) return static::$instance;
     parent::__construct($one, $two);
     static::$instance = $this;
   }
 
-  public static function getInstance(int $one, int $two) {
+  public static function getInstance($one, $two) {
     if (static::$instance === null) static::$instance = new static($one, $two);
     return static::$instance;
   }
@@ -46,7 +46,7 @@ class TestSingleton extends TestClass {
 
 class DerivTestSingleton extends DerivTestClass {
   protected static $instance;
-  public function __construct(int $one, int $two) {
+  public function __construct($one, $two) {
     if (static::$instance !== null) return static::$instance;
     parent::__construct($one, $two);
     static::$instance = $this;
@@ -58,7 +58,7 @@ class DerivTestSingleton extends DerivTestClass {
     return static::$instance;
   }
 
-  public static function getInstance(int $one, int $two) {
+  public static function getInstance($one, $two) {
     if (static::$instance === null) static::$instance = new static($one, $two);
     return static::$instance;
   }
@@ -68,7 +68,7 @@ class InjectableTestClass implements \KS\FactoryConsumerInterface {
     public $factory;
     public $num;
 
-    public function __construct(int $num=null) {
+    public function __construct($num=null) {
         $this->num = $num;
     }
 
@@ -77,18 +77,6 @@ class InjectableTestClass implements \KS\FactoryConsumerInterface {
     }
 }
 
-class Injectable54TestClass implements \KS\Factory54ConsumerInterface {
-    public $factory;
-    public $num;
-
-    public function __construct($num=null) {
-        $this->num = $num;
-    }
-
-    public function setFactory(\KS\Factory54Interface $f) {
-        $this->factory = $f;
-    }
-}
 
 
 
@@ -97,7 +85,7 @@ class Injectable54TestClass implements \KS\Factory54ConsumerInterface {
 
 
 class TestFactory extends \KS\Factory {
-  public function getClass(string $type, string $subtype=null) {
+  public function getClass($type, $subtype=null) {
     if ($type == 'test') {
       if ($subtype == 'singleton') return 'TestSingleton';
       if ($subtype == 'injectable') return 'InjectableTestClass';
@@ -108,30 +96,6 @@ class TestFactory extends \KS\Factory {
 }
 
 class DerivTestFactory extends TestFactory {
-  public function getClass(string $type, string $subtype=null) {
-    if ($type == 'test') {
-      if ($subtype == 'origSingleton') return parent::getClass($type, 'singleton');
-      if ($subtype == 'singleton') return 'DerivTestSingleton';
-      if ($subtype != 'orig') return 'DerivTestClass';
-    }
-    return parent::getClass($type, $subtype);
-  }
-}
-
-
-
-class TestFactory54 extends \KS\Factory54 {
-  public function getClass($type, $subtype=null) {
-    if ($type == 'test') {
-      if ($subtype == 'singleton') return 'TestSingleton';
-      if ($subtype == 'injectable') return 'Injectable54TestClass';
-      return 'TestClass';
-    }
-    return parent::getClass($type, $subtype);
-  }
-}
-
-class DerivTestFactory54 extends TestFactory54 {
   public function getClass($type, $subtype=null) {
     if ($type == 'test') {
       if ($subtype == 'origSingleton') return parent::getClass($type, 'singleton');
