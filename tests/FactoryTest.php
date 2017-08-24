@@ -24,7 +24,7 @@ class FactoryTests extends TestCase {
     try {
       $f->newTest();
       $this->fail('Should have thrown an exception');
-    } catch(ArgumentCountError $e) {
+    } catch(PHPUnit_Framework_Error_Warning $e) {
       $this->assertTrue(true, 'This is the expected behavior');
     }
   }

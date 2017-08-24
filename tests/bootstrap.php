@@ -10,7 +10,7 @@ class TestClass {
   protected $one;
   protected $two;
 
-  public function __construct(int $one, int $two) {
+  public function __construct($one, $two) {
     $this->one = $one;
     $this->two = $two;
   }
@@ -36,13 +36,13 @@ class DerivTestClass extends TestClass {
 
 class TestSingleton extends TestClass {
   protected static $instance;
-  public function __construct(int $one, int $two) {
+  public function __construct($one, $two) {
     if (static::$instance !== null) return static::$instance;
     parent::__construct($one, $two);
     static::$instance = $this;
   }
 
-  public static function getInstance(int $one, int $two) {
+  public static function getInstance($one, $two) {
     if (static::$instance === null) static::$instance = new static($one, $two);
     return static::$instance;
   }
@@ -50,7 +50,7 @@ class TestSingleton extends TestClass {
 
 class DerivTestSingleton extends DerivTestClass {
   protected static $instance;
-  public function __construct(int $one, int $two) {
+  public function __construct($one, $two) {
     if (static::$instance !== null) return static::$instance;
     parent::__construct($one, $two);
     static::$instance = $this;
@@ -62,7 +62,7 @@ class DerivTestSingleton extends DerivTestClass {
     return static::$instance;
   }
 
-  public static function getInstance(int $one, int $two) {
+  public static function getInstance($one, $two) {
     if (static::$instance === null) static::$instance = new static($one, $two);
     return static::$instance;
   }
@@ -72,7 +72,7 @@ class InjectableTestClass implements FactoryConsumerInterface {
     public $factory;
     public $num;
 
-    public function __construct(int $num=null) {
+    public function __construct($num=null) {
         $this->num = $num;
     }
 

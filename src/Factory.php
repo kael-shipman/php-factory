@@ -8,11 +8,12 @@ abstract class Factory {
     }
 
     public static function getInstance() {
-        if (!array_key_exists(static::class, static::$instance)) static::$instance[static::class] = new static();
-        return static::$instance[static::class];
+        $classname = __NAMESPACE__."\\".get_called_class();
+        if (!array_key_exists($classname, static::$instance)) static::$instance[$classname] = new static();
+        return static::$instance[$classname];
     }
 
-    protected function instantiate(string $c, array $args, string $action='new') {
+    protected function instantiate($c, $args, $action='new') {
         $instance = null;
         if ($action == 'new') {
             $c = new \ReflectionClass($c);
