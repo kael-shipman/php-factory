@@ -10,15 +10,15 @@ class FactoryTests extends TestCase {
   
   public function testFactoryCanOptionallyAutoInjectSelfIntoChildren() {
     $f = TestFactory::getInstance();
-    $i = $f->neew('test', null, 100, 200);
+    $i = $f->new('test', null, 100, 200);
 
     $this->assertTrue(true, "Didn't throw an error. Good.");
 
-    $i = $f->neew('test', 'injectable');
+    $i = $f->new('test', 'injectable');
     $this->assertTrue($i->factory === $f, "Should be able to pass factory explicitly");
     $this->assertNull($i->num, "The second parameter should still be unset");
 
-    $i = $f->neew('test', 'injectable', 100);
+    $i = $f->new('test', 'injectable', 100);
     $this->assertTrue($i->factory === $f, "Should be able to pass factory explicitly with other params");
     $this->assertEquals(100, $i->num, "The second parameter should be set correctly");
   }
@@ -40,9 +40,9 @@ class FactoryTests extends TestCase {
     $f = TestFactory::getInstance();
 
     try {
-      $f->neew('test');
+      $f->new('test');
       $this->fail('Should have thrown an exception');
-    } catch(PHPUnit_Framework_Error_Warning $e) {
+    } catch(ArgumentCountError $e) {
       $this->assertTrue(true, 'This is the expected behavior');
     }
   }
@@ -51,7 +51,7 @@ class FactoryTests extends TestCase {
     $f = TestFactory::getInstance();
 
     try {
-      $f->neew('invalid');
+      $f->new('invalid');
       $this->fail('Should have thrown an exception');
     } catch(\KS\UnknownClassException $e) {
       $this->assertTrue(true, 'This is the expected behavior');
@@ -61,14 +61,14 @@ class FactoryTests extends TestCase {
   public function testCorrectlyInstantiatesClass() {
     $f = TestFactory::getInstance();
 
-    $test = $f->neew('test', null, 1,2);
+    $test = $f->new('test', null, 1,2);
     $this->assertTrue($test instanceof TestClass);
   }
 
   public function testCorrectlyInstantiatesDerivativeClass() {
     $f = DerivTestFactory::getInstance();
 
-    $test = $f->neew('test', null, 1,2);
+    $test = $f->new('test', null, 1,2);
     $this->assertTrue($test instanceof DerivTestClass);
   }
 
@@ -108,5 +108,4 @@ class FactoryTests extends TestCase {
     $this->assertEquals(3, $dNewTest->getOne());
   }
 }
-
 

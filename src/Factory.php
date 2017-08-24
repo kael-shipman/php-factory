@@ -8,24 +8,23 @@ abstract class Factory implements FactoryInterface {
     }
 
     public static function getInstance() {
-        $classname = __NAMESPACE__."\\".get_called_class();
-        if (!array_key_exists($classname, static::$instance)) static::$instance[$classname] = new static();
-        return static::$instance[$classname];
+        if (!array_key_exists(static::class, static::$instance)) static::$instance[static::class] = new static();
+        return static::$instance[static::class];
     }
 
-    public function neew($class, $type=null) {
+    public function new(string $class, string $type=null) {
         $args = array();
         for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
         return $this->instantiate($class, $type, 'new', $args);
     }
 
-    public function create($class, $type=null) {
+    public function create(string $class, string $type=null) {
         $args = array();
         for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
         return $this->instantiate($class, $type, 'create', $args);
     }
 
-    public function get($class, $type=null) {
+    public function get(string $class, string $type=null) {
         $c = $this->getClass($class, $type);
         $args = array();
         for($i = 2; $i < func_num_args(); $i++) $args[] = func_get_arg($i);
@@ -33,7 +32,7 @@ abstract class Factory implements FactoryInterface {
         return call_user_func_array(array($c, 'getInstance'), $args);
     }
 
-    protected function instantiate($class, $type=null, $action, $args) {
+    protected function instantiate(string $class, string $type=null, string $action, array $args) {
         $c = $this->getClass($class, $type);
 
         // Now either instantiate new or static create
@@ -53,9 +52,8 @@ abstract class Factory implements FactoryInterface {
         return $instance;
     }
 
-    public function getClass($class, $subtype=null) {
+    public function getClass(string $class, string $subtype=null) {
         throw new UnknownClassException("Don't know how to create classes for type `$class::$subtype`");
     }
 }
-
 

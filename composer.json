@@ -1,6 +1,6 @@
 {
     "name" : "kael-shipman/factory",
-    "description" : "A class that provides overridable instantiation of classes based on declarative instantiation methods.",
+    "description" : "A class that provides overridable instantiation of classes through declarative method calls.",
     "type" : "library",
     "keywords" : [ "factory", "dependency injection", "injector" ],
     "license" : "GPL3",
@@ -13,10 +13,10 @@
         }
     ],
     "require" : {
-        "php" : "~5.4.0"
+        "php" : ">=5.5"
     },
     "require-dev" : {
-        "phpunit/phpunit" : "~4.8.0"
+        "phpunit/phpunit" : "~6.0"
     },
     "autoload" : {
         "psr-4" : {
