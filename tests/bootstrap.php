@@ -2,6 +2,10 @@
 
 require_once __DIR__."/../vendor/autoload.php";
 
+interface FactoryConsumerInterface {
+    function setFactory(TestFactory $f);
+}
+
 class TestClass {
   protected $one;
   protected $two;
@@ -64,7 +68,7 @@ class DerivTestSingleton extends DerivTestClass {
   }
 }
 
-class InjectableTestClass implements \KS\FactoryConsumerInterface {
+class InjectableTestClass implements FactoryConsumerInterface {
     public $factory;
     public $num;
 
@@ -72,7 +76,7 @@ class InjectableTestClass implements \KS\FactoryConsumerInterface {
         $this->num = $num;
     }
 
-    public function setFactory(\KS\FactoryInterface $f) {
+    public function setFactory(TestFactory $f) {
         $this->factory = $f;
     }
 }
@@ -84,25 +88,43 @@ class InjectableTestClass implements \KS\FactoryConsumerInterface {
 
 
 class TestFactory extends \KS\Factory {
-  public function getClass(string $type, string $subtype=null) {
-    if ($type == 'test') {
-      if ($subtype == 'singleton') return 'TestSingleton';
-      if ($subtype == 'injectable') return 'InjectableTestClass';
-      return 'TestClass';
+    public function newTest() {
+        return $this->instantiate('TestClass', func_get_args());
     }
-    return parent::getClass($type, $subtype);
-  }
+    public function getSingleton() {
+        return $this->instantiate('TestSingleton', func_get_args(), 'getInstance');
+    }
+    public function newInjectableTest() {
+        return $this->instantiate('InjectableTestClass', func_get_args());
+    }
+    public function createBadTest() {
+        return $this->instantiate('TestClass', func_get_args(), 'notAMethod');
+    }
+
+
+
+
+    protected function injectServices($obj) {
+        if ($obj instanceof FactoryConsumerInterface) $obj->setFactory($this);
+    }
 }
 
 class DerivTestFactory extends TestFactory {
-  public function getClass(string $type, string $subtype=null) {
-    if ($type == 'test') {
-      if ($subtype == 'origSingleton') return parent::getClass($type, 'singleton');
-      if ($subtype == 'singleton') return 'DerivTestSingleton';
-      if ($subtype != 'orig') return 'DerivTestClass';
+    public function createTest() {
+        return $this->instantiate('DerivTestClass', func_get_args(), 'create');
     }
-    return parent::getClass($type, $subtype);
-  }
+    public function newTest() {
+        return $this->instantiate('DerivTestClass', func_get_args());
+    }
+    public function getSingleton() {
+        return $this->instantiate('DerivTestSingleton', func_get_args(), 'getInstance');
+    }
+    public function newOrigTest() {
+        return $this->instantiate('TestClass', func_get_args());
+    }
+    public function getOrigSingleton() {
+        return $this->instantiate('TestSingleton', func_get_args(), 'getInstance');
+    }
 }
 
 
