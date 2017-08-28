@@ -18,11 +18,8 @@ abstract class Factory {
             $c = new \ReflectionClass($c);
             $instance = $c->newInstanceArgs($args);
         } else {
-            try {
-                $instance = call_user_func_array(array($c, $action), $args);
-            } catch (\Exception $e) {
-                throw new \RuntimeException("Don't know how to handle action `$action`. You can only pass actions that are static methods on the class you're creating, or `new` to instantiate a new object via its constructor.");
-            }
+            if (method_exists($c, $action)) $instance = call_user_func_array(array($c, $action), $args);
+            else throw new \RuntimeException("Don't know how to handle action `$action`. You can only pass actions that are static methods on the class you're creating, or `new` to instantiate a new object via its constructor.");
         }
 
         // Inject self and other services, if applicable
