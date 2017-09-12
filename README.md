@@ -1,5 +1,44 @@
 # Factory
 
+> 
+> **DEFUNCT**
+> 
+> This project is not useful anymore. For purposes of useful type-checking, Abstract Factory Classes should use explicit method names for instantiation, rather than string-based instantiation. This fact negates any benefit that this class once offered.
+>
+> For those who came here hoping to find a solution to their instantiation woes, the correct answer is something like this:
+> 
+> ```php
+> <?php
+> // FactoryInterface.php
+> namespace YourNamespace;
+>
+> interface FactoryInterface {
+>     public function newMyObject();
+>     public function newYourObject();
+> }
+> ?>
+> 
+> 
+> <?php
+> // Factory.php
+> namespace YourNamespace;
+> 
+> class Factory implements FactoryInterface {
+>     public function newMyObject() {
+>         return new MyObject(func_get_args()); 
+>     }
+>
+>     public function newYourObject() {
+>         return new \OtherNamespace\YourObject(func_get_args());
+>     }
+> }
+> ?>
+> ```
+> 
+> You can use this same technique to execute static methods, get static class constants, etc. The line is blurry about what you should actually implement within the Factory class, but you can feel that out yourself.
+> 
+
+
 A class that provides overridable instantiation of classes based on text descriptors rather than concrete class names.
 
 If you don't know about Dependency Injection, there are plenty of resources on the internet about it. Please make sure you understand what this is for before using it.
